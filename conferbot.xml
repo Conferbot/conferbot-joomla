@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="plugin" group="system" method="upgrade">
+    <name>PLG_SYSTEM_CONFERBOT</name>
+    <author>Conferbot</author>
+    <authorEmail>support@conferbot.com</authorEmail>
+    <authorUrl>https://conferbot.com</authorUrl>
+    <creationDate>2026-07</creationDate>
+    <copyright>(C) 2023-2026 Conferbot</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE</license>
+    <version>1.0.0</version>
+    <description>PLG_SYSTEM_CONFERBOT_XML_DESCRIPTION</description>
+    <namespace path="src">Conferbot\Plugin\System\Conferbot</namespace>
+    <files>
+        <folder plugin="conferbot">services</folder>
+        <folder>src</folder>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/plg_system_conferbot.ini</language>
+        <language tag="en-GB">en-GB/plg_system_conferbot.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                    name="bot_id"
+                    type="text"
+                    label="PLG_SYSTEM_CONFERBOT_BOT_ID_LABEL"
+                    description="PLG_SYSTEM_CONFERBOT_BOT_ID_DESC"
+                    hint="64a1b2c3d4e5f6a7b8c9d0e1"
+                    size="40"
+                    required="true"
+                />
+                <field
+                    name="embed_type"
+                    type="list"
+                    label="PLG_SYSTEM_CONFERBOT_EMBED_TYPE_LABEL"
+                    description="PLG_SYSTEM_CONFERBOT_EMBED_TYPE_DESC"
+                    default="live_chat"
+                    validate="options"
+                >
+                    <option value="live_chat">PLG_SYSTEM_CONFERBOT_EMBED_TYPE_LIVE_CHAT</option>
+                    <option value="popup_chat">PLG_SYSTEM_CONFERBOT_EMBED_TYPE_POPUP_CHAT</option>
+                </field>
+                <field
+                    name="script_url"
+                    type="text"
+                    label="PLG_SYSTEM_CONFERBOT_SCRIPT_URL_LABEL"
+                    description="PLG_SYSTEM_CONFERBOT_SCRIPT_URL_DESC"
+                    default="https://cdn.conferbot.com/dist/v1/widget.min.js"
+                    size="60"
+                />
+            </fieldset>
+        </fields>
+    </config>
+</extension>
