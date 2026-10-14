@@ -97,7 +97,8 @@ final class Conferbot extends CMSPlugin implements SubscriberInterface
             );
         }
 
-        $optionsJson = LoaderHelper::toJson(LoaderHelper::buildOptions($site, $user));
+        $secret      = trim((string) $this->params->get('identity_secret', ''));
+        $optionsJson = LoaderHelper::toJson(LoaderHelper::buildOptions($site, $user, $secret));
 
         $document->addCustomTag(LoaderHelper::render($botId, $embedType, $scriptUrl, $optionsJson));
     }
