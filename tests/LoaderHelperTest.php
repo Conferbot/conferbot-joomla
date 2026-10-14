@@ -203,4 +203,15 @@ class LoaderHelperTest extends TestCase
         $this->assertSame(1, substr_count($html, '</script>'));
         $this->assertStringContainsString('js.onload = function ()', $html);
     }
+
+    public function testLoggedInUserIsSignedWithTheWorkspaceSecret()
+    {
+        $site = array('name' => 'Site', 'url' => 'https://s.example/', 'language' => 'en-GB');
+        $user = array('id' => 42, 'name' => 'Jane', 'email' => 'jane@example.com');
+        $options = LoaderHelper::buildOptions($site, $user, 's3cret');
+        $this->assertSame(hash_hmac('sha256', 'joomla-42', 's3cret'), $options['user']['hash']);
+        $this->assertArrayNotHasKey('hash', LoaderHelper::buildOptions($site, $user)['user']);
+        $this->assertArrayNotHasKey('user', LoaderHelper::buildOptions($site, null, 's3cret'));
+        $this->assertStringNotContainsString('s3cret', LoaderHelper::toJson($options));
+    }
 }
