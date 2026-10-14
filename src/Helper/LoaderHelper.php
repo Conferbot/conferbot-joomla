@@ -80,11 +80,12 @@ class LoaderHelper
      * context in Conferbot conversations.
      *
      * @param   array       $site  Keys: name, url, language.
-     * @param   array|null  $user  Keys: id, name, email (null = guest).
+     * @param   array|null  $user    Keys: id, name, email (null = guest).
+     * @param   string      $secret  The workspace's identity verification secret ('' = off).
      *
      * @return  array  Widget options.
      */
-    public static function buildOptions(array $site, $user = null)
+    public static function buildOptions(array $site, $user = null, $secret = '')
     {
         $options = array(
             'customData' => array(
@@ -101,9 +102,28 @@ class LoaderHelper
                 'name'  => isset($user['name']) ? (string) $user['name'] : '',
                 'email' => isset($user['email']) ? (string) $user['email'] : '',
             );
+
+            // Identity verification: the id signed with the workspace secret,
+            // so Conferbot knows this is the site's own logged-in user.
+            if ((string) $secret !== '') {
+                $options['user']['hash'] = self::userHash($options['user']['id'], $secret);
+            }
         }
 
         return $options;
+    }
+
+    /**
+     * HMAC-SHA256 of the signed value (the user id) with the secret, hex - as Conferbot checks it.
+     *
+     * @param   string  $value   The user id sent to the widget.
+     * @param   string  $secret  The workspace secret.
+     *
+     * @return  string
+     */
+    public static function userHash($value, $secret)
+    {
+        return hash_hmac('sha256', (string) $value, (string) $secret);
     }
 
     /**
