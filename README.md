@@ -4,11 +4,9 @@ Embeds the [Conferbot](https://conferbot.com) AI chat widget on every frontend p
 
 ## See it in action
 
-Paste the Chatbot ID, enable the plugin, and the bot is live on the site - 30 seconds end to end:
+Upload the package, paste the Chatbot ID, enable the plugin, and the bot is live on the site (recorded on Joomla 6.1.4, PHP 8.4). Click the GIF for the full-size MP4:
 
-![Conferbot Joomla demo: paste the bot ID, save, chat appears on the site](docs/demo.gif)
-
-[HD video (MP4)](docs/demo.mp4) - also attached to the [latest release](https://github.com/Conferbot/conferbot-joomla/releases).
+[![Conferbot on Joomla: upload the package, paste the bot ID, enable, save, open the site and chat](docs/media/install.gif)](https://github.com/Conferbot/conferbot-joomla/releases/download/v1.0.0/install.mp4)
 
 ## How it works
 
@@ -40,29 +38,65 @@ With a secret from Conferbot (workspace settings > Security > Identity verificat
 
 ## Requirements
 
-- Joomla 4.2+, 5.x or 6.x (verified on 6.1)
-- PHP 7.4+
-- A Conferbot account with a published chatbot (or use the built-in demo bot to try it first)
+- Joomla 4.2 or later, 5.x or 6.x (verified on 6.1.4).
+- PHP 7.4 or later, and whatever your Joomla version needs (Joomla 5 and 6 need PHP 8.1+).
+- A Conferbot account with a published bot ([app.conferbot.com](https://app.conferbot.com)), or the built-in demo bot to try it first.
+- Visitors' browsers load `https://cdn.conferbot.com/dist/v1/widget.min.js` and connect to `wdt.conferbot.com`. If your site sends a Content Security Policy, allow both.
 
 ## Installation
 
-1. Zip the plugin folder contents as `plg_system_conferbot.zip` (the manifest `conferbot.xml` must be at the top level of the zip).
-2. In the Joomla administrator, go to **System > Install > Extensions** and upload the zip.
-3. Go to **System > Manage > Plugins**, search for "Conferbot", open **System - Conferbot**.
-4. Paste your **Chatbot ID**, set the **Status** to *Enabled*, and click **Save**.
+### 1. Get the package
+
+Download `plg_system_conferbot-<version>.zip` from the [latest release](https://github.com/Conferbot/conferbot-joomla/releases/latest).
+
+To build it from a checkout instead (the manifest `conferbot.xml` must be at the top of the zip, not in a folder):
+
+```bash
+git archive --format=zip -o plg_system_conferbot.zip HEAD conferbot.xml services src language LICENSE
+```
+
+### 2. Install it
+
+1. In the Joomla administrator go to **System > Install > Extensions**.
+2. Open the **Upload Package File** tab and drop the zip on it (or click **Or browse for file**). Joomla says *Installation of the plugin was successful*.
+
+From the command line instead (Joomla 4.1+): `php cli/joomla.php extension:install --path=/path/to/plg_system_conferbot.zip`.
+
+Joomla installs plugins switched off, so the chat does not show until you finish step 4.
+
+### 3. Find your Chatbot ID
+
+The Chatbot ID is a 24-character code such as `64a1b2c3d4e5f6a7b8c9d0e1`.
+
+1. Sign in at [app.conferbot.com](https://app.conferbot.com) and open your bot.
+2. Click **Share**, then **Embed into your website**.
+3. The ID is the first value in the code: `window.ConferbotWidget("64a1b2c3d4e5f6a7b8c9d0e1", "live_chat")`. It is also in the browser's address bar: `.../chatbot/64a1b2c3d4e5f6a7b8c9d0e1/embed`.
+
+You can paste the whole embed code or the dashboard URL instead; the plugin keeps only the ID when you save.
+
+### 4. Turn it on
+
+1. Go to **System > Manage > Plugins**, search for *conferbot* and open **System - Conferbot**.
+2. Paste the **Chatbot ID**.
+3. Set **Status** to *Enabled*.
+4. Click **Save & Close**. Joomla says *Plugin saved*.
 
 ## Configuration
 
-Enable/disable is Joomla's own plugin publish state; everything else lives in the plugin options. You can paste the bare ID, the full embed snippet, or a dashboard URL into the Chatbot ID field - the plugin extracts the ID for you when you save.
+Enable/disable is Joomla's own plugin status (System > Manage > Plugins); everything else is in the plugin's options.
 
 **No account yet?** Paste `691c970890527a0468f9b2c9` to try our demo bot - it works right away, no signup needed.
 
 | Setting | Description |
 |---|---|
-| Chatbot ID | Required to show the chat. In the Conferbot dashboard open your bot, go to **Share > Embed** and copy the code; the plugin finds the 24-character ID in it when you save. |
-| Identity verification secret | Optional. Signs logged-in users so Conferbot can trust them. |
-| How the chat appears | Floating chat bubble (default) or popup window. |
-| Widget script URL | Leave as is for the Conferbot CDN. Useful for staging/self-hosted widget builds. *(Advanced)* |
+| Status | Joomla's switch. *Disabled* means no Conferbot code on any page. |
+| Chatbot ID | Required to show the chat. Anything pasted is reduced to the 24-character ID on save; with no valid ID the plugin prints nothing. |
+| How the chat appears | **Floating chat bubble** (`live_chat`, default) or **Popup window** (`popup_chat`). |
+| Identity verification secret | Optional. From Conferbot workspace settings > Security > Identity verification. Signs logged-in users so Conferbot can trust their name and email. |
+| Widget script URL | Leave as is for the Conferbot CDN. Only for staging or self-hosted widget builds. *(Advanced)* |
+| Access, Ordering | Joomla's standard plugin fields. Leave **Access** on *Public* so guests get the chat too. |
+
+How the chat looks and behaves (colours, launcher, greeting, flows, AI agent, live chat, languages, pages to hide it on) is set per bot in the Conferbot dashboard and delivered at runtime.
 
 ## Architecture
 
@@ -102,17 +136,35 @@ docker run --rm -v "$PWD":/mod -v /path/to/phpunit-9.phar:/phpunit.phar:ro \
   -w /mod php:8.2-cli php /phpunit.phar
 ```
 
-## Manual verification
+## Check that it works
 
-1. Save the plugin with a valid Chatbot ID (or the demo bot) and set it to *Enabled*.
-2. Open the site frontend - the chat bubble should appear (subject to the bot's own dashboard settings such as disabled URLs and load delay).
-3. Log in as a Joomla user and start a chat: the conversation in the Conferbot inbox should show the user's name/email and site context (marked verified when the identity secret is set).
+1. Open the site in a private window. The chat bubble appears bottom right (unless the bot's dashboard settings delay it or hide it on that URL).
+2. Click it, start the chat and send a message. It shows up in the Conferbot dashboard under the bot's conversations.
+3. Log in on the frontend as a Joomla user and chat again: the conversation shows the user's name and email and the site details (marked verified when the identity secret is set).
+4. To check the code is on the page: view the page source and search for `conferbot-js`. It appears once in the `<head>`, with `window.ConferbotWidget("<your ID>", ...)`.
+
+## Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| No `conferbot-js` in the page source | The plugin is disabled, the Chatbot ID is empty or invalid, or **Access** is not *Public*. Then clear the cache: **System > Clear Cache**, plus any page cache plugin, CDN or proxy cache. |
+| `conferbot-js` is there but no bubble | A Content Security Policy without `cdn.conferbot.com` / `wdt.conferbot.com`, an ad or script blocker, or the bot is unpublished or hides itself on that URL. Check the browser console. |
+| Nothing on some pages only | Those pages are not HTML (feeds, JSON, raw), or the template does not output `<jdoc:include type="metadata" />` / `<jdoc:include type="scripts" />` in its head. |
+| A different or second bot appears | The embed code is still pasted in the template or a custom module. Remove it; the plugin does not load twice when a `conferbot-js` script is already on the page. |
+| Logged-in users are unverified | Paste the identity verification secret and make sure it matches the one in your Conferbot workspace. |
+
+Still stuck? Write to support@conferbot.com.
+
+## Uninstall
+
+- **Pause it:** set the plugin's **Status** to *Disabled*. The settings are kept.
+- **Remove it:** **System > Manage > Extensions**, search for *conferbot*, tick **System - Conferbot** and click **Uninstall**. Joomla removes the files and the plugin's settings (including the identity secret). Your bot and its conversations stay in your Conferbot account.
 
 ## Notes & limitations
 
 - No API key or workspace ID is required - the widget resolves everything server-side from the Chatbot ID over Socket.IO (`wdt.conferbot.com`).
 - The widget is injected on the site client only; administrator pages are never touched.
-- If the widget does not appear: check the plugin is enabled (System > Plugins), the Chatbot ID is correct and the bot is published/not disabled, and clear the Joomla cache (**System > Clear Cache**).
+- The manifest has no update server yet, so Joomla will not offer updates; install a newer zip over the old one to upgrade (settings are kept).
 
 ## License
 
