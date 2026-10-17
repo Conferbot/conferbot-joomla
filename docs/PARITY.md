@@ -11,4 +11,4 @@ Verified on Joomla 6.
 
 ## Left
 
-- **Update server.** `conferbot.xml` has no `<updateservers>` entry yet, so Joomla can't offer updates. Add one that points at an update XML (version, download URL to a GitHub release zip, `targetplatform`), and publish the first release. Publishing needs the maintainer's go-ahead.
+- **Update server.** Done in 1.1.1: `conferbot.xml` registers `updates.xml` (raw GitHub, `main`), which points at the release zip with its sha256.
