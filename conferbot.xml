@@ -4,10 +4,10 @@
     <author>Conferbot</author>
     <authorEmail>support@conferbot.com</authorEmail>
     <authorUrl>https://conferbot.com</authorUrl>
-    <creationDate>2026-07</creationDate>
+    <creationDate>2026-10</creationDate>
     <copyright>(C) 2023-2026 Conferbot</copyright>
     <license>GNU General Public License version 2 or later; see LICENSE</license>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <description>PLG_SYSTEM_CONFERBOT_XML_DESCRIPTION</description>
     <namespace path="src">Conferbot\Plugin\System\Conferbot</namespace>
     <files>
@@ -60,4 +60,7 @@
             </fieldset>
         </fields>
     </config>
+    <updateservers>
+        <server type="extension" priority="1" name="Conferbot">https://raw.githubusercontent.com/Conferbot/conferbot-joomla/main/updates.xml</server>
+    </updateservers>
 </extension>
