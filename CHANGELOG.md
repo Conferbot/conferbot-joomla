@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 - 2026-10-17
+
+- Update server: the manifest now has `<updateservers>` pointing at `updates.xml` in this repository (raw.githubusercontent.com, `main`), so Joomla offers future versions in System > Update > Extensions. Required by the Joomla Extensions Directory (#6).
+- No change to the plugin's behaviour or settings.
+
 ## 1.1.0 - 2026-10-17
 
 - Identity verification: with the workspace secret in the plugin options, the logged-in user is sent with `hash = HMAC-SHA256(secret, user.id)`, computed on the server. The secret is never sent to the browser.
