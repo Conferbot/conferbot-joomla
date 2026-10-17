@@ -55,6 +55,8 @@ To build it from a checkout instead (the manifest `conferbot.xml` must be at the
 git archive --format=zip -o plg_system_conferbot.zip HEAD conferbot.xml services src language LICENSE
 ```
 
+Releasing a new version: bump `<version>` in `conferbot.xml`, build the zip as above (named `plg_system_conferbot-<version>.zip`), attach it to the GitHub release `v<version>`, then update `updates.xml` (version, `downloadurl`, `infourl` and `sha256` from `shasum -a 256 <zip>`) and push it to `main`. `updates.xml` is not in the zip.
+
 ### 2. Install it
 
 1. In the Joomla administrator go to **System > Install > Extensions**.
@@ -164,7 +166,7 @@ Still stuck? Write to support@conferbot.com.
 
 - No API key or workspace ID is required - the widget resolves everything server-side from the Chatbot ID over Socket.IO (`wdt.conferbot.com`).
 - The widget is injected on the site client only; administrator pages are never touched.
-- The manifest has no update server yet, so Joomla will not offer updates; install a newer zip over the old one to upgrade (settings are kept).
+- Updates: from 1.1.1 the manifest registers an update server (`updates.xml` on `main`, served from raw.githubusercontent.com), so Joomla offers new versions under **System > Update > Extensions**. 1.1.0 and earlier have no update server: install the 1.1.1 zip over them once (settings are kept).
 
 ## License
 
