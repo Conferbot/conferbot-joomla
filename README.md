@@ -6,7 +6,7 @@ Embeds the [Conferbot](https://conferbot.com) AI chat widget on every frontend p
 
 Upload the package, paste the Chatbot ID, enable the plugin, and the bot is live on the site (recorded on Joomla 6.1.4, PHP 8.4). Click the GIF for the full-size MP4:
 
-[![Conferbot on Joomla: upload the package, paste the bot ID, enable, save, open the site and chat](docs/media/install.gif)](https://github.com/Conferbot/conferbot-joomla/releases/download/v1.0.0/install.mp4)
+[![Conferbot on Joomla: upload the package, paste the bot ID, enable, save, open the site and chat](docs/media/install.gif)](https://github.com/Conferbot/conferbot-joomla/releases/download/v1.1.0/install.mp4)
 
 ## How it works
 
